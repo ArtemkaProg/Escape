@@ -69,3 +69,16 @@ Assets/Scenes/Escape_Zone001_GRAPHICS_PASS4.unity
 Assets/Scenes/Escape_Zone001_GRAPHICS_PASS4.unity.meta
 Assets/Scenes/Escape_Cameras_GRAPHICS_PASS4.unity
 Assets/Scenes/Escape_Cameras_GRAPHICS_PASS4.unity.meta
+
+# Stage 8 — locally reconstructed original meshes/materials (APK content)
+Assets/StreamingAssets/escape_mesh_manifest.json
+Assets/StreamingAssets/escape_mesh_manifest.json.meta
+RecoverySource/MeshData/
+Assets/RecoveredOriginalMeshes/
+Assets/RecoveredOriginalMeshes.meta
+Assets/RecoveredOriginalMaterials/
+Assets/RecoveredOriginalMaterials.meta
+Assets/Scenes/Escape_Meshes_PASS5.unity
+Assets/Scenes/Escape_Meshes_PASS5.unity.meta
+Assets/Scenes/Escape_Zone003_MESH_PREVIEW.unity
+Assets/Scenes/Escape_Zone003_MESH_PREVIEW.unity.meta
