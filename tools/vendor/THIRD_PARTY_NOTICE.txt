@@ -1,0 +1,12 @@
+Third-party ETCImagePlugin.py
+
+Source: https://github.com/FluffyJay1/ETCImagePlugin/blob/master/ETCImagePlugin.py
+Author: FluffyJay1
+Original project: ETCImagePlugin (Pillow decoder for ETC1 and ETC2)
+The upstream LICENSE allows reuse with attribution and prohibits passing it off as original work.
+This source is bundled unchanged from upstream for the Escape APK recovery utility.
+The code is third-party and is NOT authored by this repository's maintainers.
+
+Full original LICENSE text:
+you can do whatever, i don't even care if you credit me or not
+but if you try to pass this off as your original work then things will be different
