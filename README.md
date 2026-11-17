@@ -215,3 +215,18 @@
 
 **Обмеження:** за APK підтверджені числові ID шейдерів, обробка RGB/alpha, кольори та призначення матеріалів. Проте самі ShaderLab-файли у GitHub — **самостійно реалізовані сумісні наближення**, НЕ оригінальний код гри. PixelSnap, спеціальні ефекти частинок, порядок прозорих MeshRenderer, анімація та поведінка камери поки неповні. Stage 10 ще не протестований у твоєму Unity 6.0.58f2 — можлива потреба виправлень.
 
+
+## Етап 11 — регульована яскравість і серпанок фону (діагностика)
+
+Після PASS7 силуети промислових конструкцій схожі на вихідну гру, але **у відеореференсі задній план здається світлішим і менш контрастним**. Це спостереження зі скриншотів, а не доказ неправильної Gamma/Linear-конфігурації. Відсутні підтверджені дані про точні налаштування освітлення/постобробки під час оригінального геймплею, а відео на YouTube могло бути перекодоване.
+
+Щоб нічого не псувати, додано незалежний Shader `EscapeRecovery/InvertedTextureTunable` та меню **Escape Recovery → 14 - Tune Zone003 background brightness (preview only)**. Вони працюють **виключно з копіями** матеріалів `EscapeRecovery/InvertedTextureVertex` і залишають силуетний шейдер `Black.mat` незміненим.
+
+1. Збережи `Escape_Zone003_SHADERS_PASS7.unity`, закрий Unity Editor, виконай `git pull origin main`.
+2. Відкрий сцену `Assets/Scenes/Escape_Zone003_SHADERS_PASS7.unity`.
+3. Вибери **Escape Recovery → 14 - Tune Zone003 background brightness (preview only)**, натисни **Create safe background-tuning preview**.
+4. Створиться окрема сцена `Assets/Scenes/Escape_Zone003_BG_TUNING.unity` (або нумерована версія) з новими локальними Material у `Assets/RecoveredBackgroundTuning/`.
+5. У вкладці Game з **16:9** порівняй оригінальний YouTube-кадр і тестову сцену. Змінюй **Background brightness** (почни з 1.08), **Atmospheric haze** (почни з 0.06). Колір **Haze tint** можна також змінити. Кнопка **Reset to unadjusted Stage 10 appearance** відновлює brightness=1 та haze=0.
+6. Натисни **Save background-tuning preview**. Щоб відмовитися від експерименту, відкрий SHADERS_PASS7 — він залишається незмінним.
+
+Поточні значення 1.08 / 0.06 — лише делікатна **гіпотеза для ручного підбору**; не підтверджені оригінальними файлами APK. Оригінальний колірний простір Unity Editor, fog/post-processing і шейдерний порядок відображення ще потрібно перевіряти окремо. Інструмент створено в GitHub, але **його компіляцію/рендер у Unity на ПК користувача поки не перевірено**.
