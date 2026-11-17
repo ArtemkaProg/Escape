@@ -57,3 +57,15 @@ Assets/Scenes/Escape_Sprites_PASS1.unity.meta
 Assets/Scenes/Escape_Sprites_PASS2.unity.meta
 Assets/StreamingAssets/escape_sprite_manifest.json.meta
 Assets/RecoveredSprites.meta
+
+# Stage 7 derived sprites/meshes and local proprietary sprite vertices
+Assets/StreamingAssets/escape_sprite_geometry.json
+Assets/StreamingAssets/escape_sprite_geometry.json.meta
+Assets/RecoveredSpritesV2/
+Assets/RecoveredSpritesV2.meta
+Assets/RecoveredPolygonMeshes/
+Assets/RecoveredPolygonMeshes.meta
+Assets/Scenes/Escape_Zone001_GRAPHICS_PASS4.unity
+Assets/Scenes/Escape_Zone001_GRAPHICS_PASS4.unity.meta
+Assets/Scenes/Escape_Cameras_GRAPHICS_PASS4.unity
+Assets/Scenes/Escape_Cameras_GRAPHICS_PASS4.unity.meta
