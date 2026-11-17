@@ -163,3 +163,11 @@
 Оригінальний RocketInputController (Assembly-CSharp.il.txt) працює з кнопкою тяги OnDown/OnUp. RocketMovementController.UpdateVelocity інтегрує вертикальне прискорення (-gravity + thrustStrength при утримуванні тяги) * physicScale; UpdatePosition інтегрує yPosition в координатах TargetTransform. У поточній сцені використано власний пробний keyboard motor з непідтвердженими числовими параметрами. Цю реалізацію не можна вважати еквівалентом оригінальної фізики, паливної системи, анімаційного графа чи скриптів частинок.
 
 У приватному архіві Escape_2015_Stage14_Rocket_Visuals_Local.zip є декодовані криві та локальний Python-екстрактор. Публічний GitHub містить редакторський EscapeRocketPreviewPass.cs і тестовий EscapeRocketKeyboardPreview.cs. PASS9 зберігається окремо, без модифікації попередніх сцен. C# компіляція/запуск у Unity 6 ще не перевірені.
+
+## Етап 15 — Rocket: відсутній нахил і пошкоджені графічні шари
+
+Після тесту користувач підтвердив, що PASS9 ракета реагує на Space і рухається по Y, але без повороту та зі спотвореними кольоровими деталями корпусу. Перевірка `EscapeRocketKeyboardPreview.cs` показала: Update змінює лише позицію Y, жодного нахилу не обчислює. Прямий аналіз `RocketMovementController::ComputeWantedRotation` та `UpdateOrientation` в оригінальному `Assembly-CSharp.il.txt` підтвердив оригінальну залежність кута від atan2(Velocity.y, rotationInertia) * Rad2Deg * angularAmplitudeReduction і поворот навколо forward. Числові значення з оригінального MonoBehaviour досі не витягнуті.
+
+Безпосередньо з `level0` та sprite manifest з'ясовано, що чорні корпуси та білі стекла/паливні датчики — це окремі SpriteRenderer нащадків Rocket GO #27907, а їхнє Sprite-джерело — TextureID 32 (ETC2 SpriteAtlasTexture-1024x512). **Причина кольорових артефактів наразі не встановлена**: можливий неправильний ETC2 decode, RGB/alpha, sprite atlas crop/UV або renderer composite.
+
+Додані інструменти PASS10 створюють окремий Rocket diagnostic scene, включають демонстраційну залежність нахилу від вертикальної швидкості й runtime-клавіші G (glass/fuel gauges), C (collider sprite masks), T (tilt), щоб недеструктивно відокремити потенційні причини. Не переписують PNG чи старі сцени. Тестування Unity-коду на ПК користувача ще потрібне.
