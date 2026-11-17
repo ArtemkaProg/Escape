@@ -138,6 +138,24 @@
 
 За наявності вихідного `RecoverySource/OriginalUnityData` і `unity4_reader.py` в архіві також є власний локальний Python-екстрактор, який може повторно відтворити файли Stage8. **Реальний запуск коду PASS5 в Unity Editor ще не перевірено**, тому у разі помилок надішли повний лог з Console.
 
+
+## Етап 9 — відновлення _MainTex матеріалів (PASS6, частково)
+
+**Перевірено безпосередньо в APK:** 33 серіалізованих Material. **23** Material містять _MainTex з доступними PNG-джерелами, ще **2** посилаються на порожні текстури шрифтів і **8** не мають _MainTex. У Stage 8 відновлено переважно базові кольори, а не оригінальні зв'язки з текстурами. Серед TextureID є промислові та природні фони.
+
+**Це не повне перенесення шейдерів.** Новий інструмент лише створює окремі Material із Sprites/Default, прив'язує оригінальну _MainTex, базовий _Color та UV scale/offset. Зміни стосуються тільки MeshRenderer, які посилаються на такі Material. Матеріали без PNG залишаються незміненими; alpha cutout, custom shaders, blend modes, pixel snapping та runtime логіка не відновлені.
+
+1. **Збережи Scene в Unity (Ctrl+S), закрий Unity Editor.** Відкрий Git Bash у корені Escape й виконай `git pull origin main`.
+2. Розпакуй приватний ZIP **Escape_2015_Stage9_Materials_Metadata.zip** із чату прямо в `D:\Unity Projects\Escape`, об'єднавши папку Assets. Перевір: `Assets/StreamingAssets/escape_material_manifest.json`.
+3. Переконайся, що є PNG з попередніх етапів у `Assets/RecoveredTextures`. Додаткових зовнішніх пакетів не потрібно.
+4. Відкрий Unity та вже створену **`Escape_Zone003_CAMERA_MATCH.unity`** (у ній ракурс камери наближений до Scene).
+5. Обери **Escape Recovery → 11 - Restore original material textures (pass 6)**.
+6. Unity збереже нову сцену **`Escape_Zone003_MATERIALS_PASS6.unity`** (за потреби з числовим суфіксом), а копії матеріалів — у `Assets/RecoveredMaterialTexturesStage9/`. Порівняй Game із CAMERA_MATCH.
+
+Оригінальні Material у `Assets/RecoveredOriginalMaterials` і старі сцени не редагуються. Публічний репозиторій не містить оригінальні матеріали чи зображення з комерційної гри.
+
+**Статус перевірки:** дані 33 Material та їхні текстурні посилання перевірені на реальному APK і зіставлені з індексом витягнутих текстур. Код Editor Stage 9 опублікований, але **ще не запускався у користувацькому Unity 6.0.58f2**. Якщо Unity виведе помилку, надішли Console. Деякі матеріали взагалі не використовуються в Zone003, тому зміни можуть бути невеликими.
+
 ## Що ще потрібно до Windows-гри
 
 1. Експортувати матеріали, Mesh, Sprite, Animator і зв'язки компонентів із Unity assets.
