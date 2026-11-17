@@ -112,3 +112,7 @@ Assets/RecoveredBackgroundTuning/
 Assets/RecoveredBackgroundTuning.meta
 Assets/Scenes/Escape_Zone003_BG_TUNING*.unity
 Assets/Scenes/Escape_Zone003_BG_TUNING*.unity.meta
+
+# Stage 12 — private APK animation references, not reconstructed Unity assets
+Assets/StreamingAssets/escape_animation_inventory.json
+Assets/StreamingAssets/escape_animation_inventory.json.meta
