@@ -62,3 +62,20 @@
 - Результат імпорту редактор має зберегти **окремою** сценою `Assets/Scenes/Escape_Sprites_PASS1.unity`; вихідна структура залишається.
 - **Не перевірено в редакторі:** чи C# імпортер компілюється і чи коректно видно всі спрайти в Unity 6.0.58f2. Результати аналізу APK ≠ завершений візуальний порт.
 - **Залишається:** декодувати ETC2, відновити Mesh/Material, повноцінний SortingLayer, оригінальні камери, Sprite pivot/geometry для частини атласів, Animator, MonoBehaviour та управління.
+
+## Етап 5: ETC2 — перевірені вхідні дані та інструменти
+
+**Перевірено безпосередньо на витягнутих із наданого APK файлах:**
+
+- Усі 12 `RecoverySource/RawTextures/*.ktx` мають правильний заголовок KTX1, `GL_COMPRESSED_RGBA8_ETC2_EAC = 0x9278` та правильні розміри блоків (16 байтів на 4×4 пікселі).
+- Усі 12 Texture ID, на які посилаються 58 відсутніх спрайтів, присутні; нестачі KTX-даних немає.
+- Готовий ZIP `Escape_2015_Stage5_ETC2_Local_Data.zip` з 12 KTX-файлами (тільки локально, **не в публічному GitHub**), архів перевірено на цілісність.
+- Написано `tools/decode_etc2_stage5.py`: перевірка KTX, конвертація в PNG, оновлення локального `escape_sprite_manifest.json` після успішної конвертації; спочатку спроба швидкого `texture2ddecoder`, потім запасний `ETCImagePlugin`.
+- Додано меню Unity: **Escape Recovery → 4 - Restore ETC2 sprites (visual pass 2)**. Воно зберігає окрему сцену `Escape_Sprites_PASS2.unity` без перезапису PASS1.
+- Код стороннього декодера `ETCImagePlugin` збережено зі згадкою оригінального автора у `tools/vendor/THIRD_PARTY_NOTICE.txt`.
+
+**Ще НЕ підтверджено:** фактичну конвертацію всіх 12 файлів на Python-середовищі користувача, коректну орієнтацію отриманих PNG, успішну компіляцію нового меню Unity та відновлення всіх 5 718 SpriteRenderer у сцені. Результат — прогноз, доки не перевіримо Console Unity.
+
+Джерела для інструментів:
+- https://github.com/K0lb3/texture2ddecoder — нативний декодер, Python API `decode_etc2a8`.
+- https://github.com/FluffyJay1/ETCImagePlugin — Python-декодер на базі Pillow (сторонній код).
