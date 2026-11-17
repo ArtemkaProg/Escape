@@ -41,3 +41,10 @@ __pycache__/
 Assets/StreamingAssets/escape_sprite_manifest.json
 Assets/RecoveredSprites/
 Assets/Scenes/Escape_Sprites_PASS1.unity
+
+# Stage 6 local-only camera IDs + inspection scenes
+Assets/StreamingAssets/escape_camera_manifest.json
+Assets/Scenes/Escape_Cameras_PASS3.unity
+Assets/Scenes/Escape_Zone001_PREVIEW.unity
+ProjectSettings/TagManager.asset
+UserSettings/TagManager_before_Escape_PASS3.asset
