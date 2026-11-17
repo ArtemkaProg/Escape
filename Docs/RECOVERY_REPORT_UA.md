@@ -137,3 +137,13 @@
 Виведено локальний маніфест `escape_shader_manifest.json` (33 Material, оригінальні ID й кольори). На публічний GitHub додано лише **незалежно написані** ShaderLab-наближення для Unity 6 та редакторський інструмент `Assets/Editor/EscapeShaderPass.cs`. Він створює окремі матеріали й `Escape_Zone003_SHADERS_PASS7.unity`; попередні сцени/матеріали не модифікує. Оригінальний ShaderLab-код і текстури не оприлюднюються.
 
 **Не перевірено:** компіляцію ShaderLab у Unity 6.0.58f2 та візуальний збіг у Game View. Очікується, що інвертований Shader ID 359 краще відповідатиме оригінальному способу зображення темних силуетів. Це гіпотеза про результат, а не підтверджене відновлення.
+
+## Етап 12 — аудит анімацій і корабля, дані з вихідного APK
+
+У локальних файлах Unity 4.6.5f1 підтверджено 152 AnimationClip (151+1), 108 AnimatorController (107+1), 1 408 Animator у level0. Бінарні посилання m_Controller в усіх 1 408 Animator перевірено: 824 вказують на існуючий контролер; 584 — нульові. Усі Animator GO ID присутні у відновленій ієрархії 34 993 GameObject. Зчитані назви/ID кліпів і контролерів, а не їхні криві чи state machine.
+
+Підтверджені контролери: Rocket, RocketFuelBar, EngineSound, OilPump, DoorController. Підтверджені кліпи: OilPumpAnimation, StartEngine, TakingOff, TryingToTakeOff, anim_RocketDoor_opening, EngineImpulsionSound_Thrust. Присутні класи Assembly-CSharp.dll: RocketInputController, RocketMovementController, RocketFuelController, RocketAnimatorController, CameraManager, Rocket. Із методів у DLL зчитані назви OnDown/OnUp, UpdateVelocity/UpdatePosition/UpdateOrientation, PlayTakingOff тощо. Працездатність Unity 6 цих оригінальних компонентів поки не доведена.
+
+Додано `tools/extract_animation_inventory.py` і `Assets/Editor/EscapeAnimationInventoryWindow.cs`, що показує локальний `escape_animation_inventory.json` у режимі **тільки читання**. Приватний архів `Escape_2015_Stage12_Animation_Inventory_Local.zip` зберігається лише для користувача, не в публічному GitHub.
+
+**Не перевірено:** компіляція Stage12 GUI в Unity Editor користувача. Не виконано конвертацію кривих/переходів і не відновлено ракету як ігровий об'єкт.
