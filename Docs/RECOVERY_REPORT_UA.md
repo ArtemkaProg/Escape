@@ -79,3 +79,18 @@
 Джерела для інструментів:
 - https://github.com/K0lb3/texture2ddecoder — нативний декодер, Python API `decode_etc2a8`.
 - https://github.com/FluffyJay1/ETCImagePlugin — Python-декодер на базі Pillow (сторонній код).
+
+## Етап 6 — Camera + Sorting Layer із серіалізованого APK
+
+**Підтверджено:** у Unity 4.6.5f1 level0 розташовано 8 Camera-компонентів, кожен має 104 байти в серіалізованій структурі. Ідентифікатори камери та оригінального GameObject зіставлено з JSON ієрархії. З бінарних полів прочитано enabled, clearFlags, backgroundColor, normalizedViewport, near/far, fieldOfView, orthographic, orthographicSize, depth, cullingMask і renderingPath.
+
+Список Camera (по об'єктах): 03_Camera_LastBackground, 02_Camera_HUD (AdventureEndScreen), CameraBackground (TutoControlScreen), 04_Camera_Flash, CameraForeground (TutoControlScreen), 01_Camera_ZoneDefault, 02_Camera_HUD (GameHUD), 02_Camera_BackgroundPerspective.
+
+- Основна 01_Camera_ZoneDefault: ортографічна; orthographicSize=4.05; depth=0; маска cullingMask=0xFFF9FFDF; transform під ExternGameElements/GameCamera.
+- GameHUD/02_Camera_HUD: ортографічна; orthographicSize=5.4; depth=100; cullingMask=0x20.
+- Усі 8 камер є окремими, кожен GameObject існує в 34 993 елементах ієрархії.
+- SpriteRenderer мають **п'ять унікальних числових Sorting Layer ID** з такою кількістю посилань: ID 0 — 3 560; ID -1349028731 — 1 622; ID -711865379 — 32; ID 484840917 — 3; ID 1936908687 — 505.
+- *Невідомо:* назви чотирьох нестандартних шарів та порядок між ними. Вони мають тимчасові RecoveredLayer_XX, тому це **не точне відтворення порядку малювання**.
+- Додано `Assets/Editor/EscapeCameraPass.cs`: відновлення 8 Camera-компонентів і числових Sorting Layer ID в окрему `Escape_Cameras_PASS3.unity`; створення окремої Zone001_PREVIEW-сцени з вимкненими сторонніми зонами.
+- Підготовлено локальний архів `Escape_2015_Stage6_Cameras_Sorting_Metadata.zip` та повторюваний скрипт `tools/extract_camera_manifest.py`. Архів камер не містить оригінальних текстур або DLL і не публікувався в репозиторій.
+- *Не перевірено:* компіляція C# Stage 6 у Unity 6.0.58f2 та достовірність фінального вигляду Game View. Їх потрібно перевірити на комп'ютері користувача.
