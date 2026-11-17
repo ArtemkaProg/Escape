@@ -116,22 +116,23 @@ def convert(project_root: Path, dry_run: bool = False, force: bool = False):
         raise RuntimeError(
             "Pillow is required. Install once using: py -3 -m pip install Pillow"
         ) from exc
-    vendor = PROJECT_ROOT / "tools" / "vendor"
-    sys.path.insert(0, str(vendor))
-    try:
-        import ETCImagePlugin  # author: FluffyJay1 (third-party)
-    except ImportError as exc:
-        raise RuntimeError(
-            "Missing tools/vendor/ETCImagePlugin.py. Run git pull origin main."
-        ) from exc
-
-    from ETCImagePlugin import TextureType
     try:
         import texture2ddecoder  # fast, optional C/C++ decoder
         print("ETC2 backend: texture2ddecoder (native, fast)")
     except ImportError:
         texture2ddecoder = None
         print("ETC2 backend: ETCImagePlugin (pure Python, considerably slower)")
+
+    if texture2ddecoder is None:
+        vendor = PROJECT_ROOT / "tools" / "vendor"
+        sys.path.insert(0, str(vendor))
+        try:
+            import ETCImagePlugin  # author: FluffyJay1 (third-party)
+            from ETCImagePlugin import TextureType
+        except ImportError as exc:
+            raise RuntimeError(
+                "Missing tools/vendor/ETCImagePlugin.py. Run git pull origin main."
+            ) from exc
 
     output_dir = project_root / "Assets" / "RecoveredTextures"
     output_dir.mkdir(parents=True, exist_ok=True)
