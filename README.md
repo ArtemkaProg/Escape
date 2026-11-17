@@ -85,6 +85,24 @@
 
 **Точність і обмеження:** підтверджено цілісність усіх 12 KTX та відповідність усім 58 Sprite ID; саму конвертацію й Stage 5 редакторський скрипт у Unity на цьому комп'ютері ще не виконували. Кількість відновлених SpriteRenderer — очікувана, а не підтверджена успішною Unity-збіркою. Повне відтворення сцени потребує відновлення мешів, камер, шейдерів, пріоритетів шарів, анімацій та логіки.
 
+## Етап 6 — оригінальні камери й числові Sorting Layer ID (PASS3)
+
+**Перевірено за APK:** у level0 є 8 камер (із налаштуваннями проєкції, розміру, depth, cullingMask, фону, viewport); у SpriteRenderer є 5 числових Sorting Layer ID. **Назви та порядок нестандартних Sorting Layers НЕ відомі**, тому використовуються тимчасові RecoveredLayer_XX.
+
+**Як виконати на ПК (Unity 6.0.58f2):**
+
+1. **Збережи проєкт**, закрий редактор і виконай у Git Bash `git pull origin main`.
+2. Завантаж із чату **Escape_2015_Stage6_Cameras_Sorting_Metadata.zip** та розпакуй у корінь `D:\Unity Projects\Escape`, об'єднавши папку Assets. Переконайся, що з'явився `Assets/StreamingAssets/escape_camera_manifest.json`.
+   - **Альтернатива без ZIP:** за наявності локальних `RecoverySource/OriginalUnityData/level0` і `RecoverySource/Tools/unity4_reader.py` (або відповідних файлів усередині RecoveredEscapeUnity) виконай `py -3 tools/extract_camera_manifest.py`.
+3. Відкрий `Assets/Scenes/Escape_Sprites_PASS2.unity`, а не STRUCTURE чи PASS1.
+4. Вибери **Escape Recovery → 5 - Restore original cameras and sorting IDs (pass 3)**. Скрипт збереже окрему сцену `Assets/Scenes/Escape_Cameras_PASS3.unity`. Якщо Unity повідомить про нерозпізнані Sorting Layer ID, перезапусти редактор та повтори команду з PASS2.
+5. Із відкритою `Escape_Cameras_PASS3.unity` виконай **Escape Recovery → 6 - Preview Zone001 only (diagnostic)**. Це створить `Assets/Scenes/Escape_Zone001_PREVIEW.unity`, де тимчасово приховані інші зони.
+6. Подивися **Game View (без Play Mode)** та Console. Покажи скриншот для перевірки.
+
+**Захист попередніх результатів:** PASS2 і PASS3 не перезаписуються цими редакторськими командами. Перед зміною ProjectSettings/TagManager.asset зберігається копія в UserSettings/TagManager_before_Escape_PASS3.asset. Нові локальні файли проігноровані Git.
+
+**Що ще не зроблено:** не відновлено оригінальний порядок/імена шарів, MeshRenderer/MeshFilter і матеріали, Sprite pivot/geometry, Animator, MonoBehaviour, логіку зміни зон та поведінку камер. Код PASS3 ще не перевірявся запуском Unity Editor в середовищі аналізу.
+
 ## Що ще потрібно до Windows-гри
 
 1. Експортувати матеріали, Mesh, Sprite, Animator і зв'язки компонентів із Unity assets.
