@@ -106,3 +106,9 @@ Assets/RecoveredShaderMaterialsStage10/
 Assets/RecoveredShaderMaterialsStage10.meta
 Assets/Scenes/Escape_Zone003_SHADERS_PASS7*.unity
 Assets/Scenes/Escape_Zone003_SHADERS_PASS7*.unity.meta
+
+# Stage 11: optional screenshot-matching background tuning (local, not game assets)
+Assets/RecoveredBackgroundTuning/
+Assets/RecoveredBackgroundTuning.meta
+Assets/Scenes/Escape_Zone003_BG_TUNING*.unity
+Assets/Scenes/Escape_Zone003_BG_TUNING*.unity.meta
