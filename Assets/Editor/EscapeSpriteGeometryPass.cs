@@ -171,8 +171,13 @@ public static class EscapeSpriteGeometryPass
                     Mathf.Clamp01(rec.pivot[1]));
                 importer.textureType = TextureImporterType.Sprite;
                 importer.spriteImportMode = SpriteImportMode.Single;
-                importer.spriteAlignment = (int)SpriteAlignment.Custom;
-                importer.spritePivot = exactPivot;
+                // Unity 6: alignment is on TextureImporterSettings, not TextureImporter.
+                // Read the current settings to preserve unrelated import options.
+                var textureSettings = new TextureImporterSettings();
+                importer.ReadTextureSettings(textureSettings);
+                textureSettings.spriteAlignment = (int)SpriteAlignment.Custom;
+                textureSettings.spritePivot = exactPivot;
+                importer.SetTextureSettings(textureSettings);
                 importer.spritePixelsPerUnit = rec.ppu;
                 importer.mipmapEnabled = false;
                 importer.alphaIsTransparency = true;
