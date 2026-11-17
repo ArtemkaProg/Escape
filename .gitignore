@@ -124,3 +124,11 @@ Assets/RecoveredOilPumpAnimationStage13/
 Assets/RecoveredOilPumpAnimationStage13.meta
 Assets/Scenes/Escape_Zone003_OILPUMP_ANIM_PASS8*.unity
 Assets/Scenes/Escape_Zone003_OILPUMP_ANIM_PASS8*.unity.meta
+
+# Stage14 user-local rocket animation metadata + preview scenes
+Assets/StreamingAssets/escape_rocket_visual_clips.json
+Assets/StreamingAssets/escape_rocket_visual_clips.json.meta
+Assets/RecoveredRocketPreviewStage14/
+Assets/RecoveredRocketPreviewStage14.meta
+Assets/Scenes/Escape_Zone003_ROCKET_TEST_PASS9*.unity
+Assets/Scenes/Escape_Zone003_ROCKET_TEST_PASS9*.unity.meta
