@@ -119,3 +119,11 @@
 
 **Не відновлено:** оригінальні shader graph, property textures/offsets, RenderQueue, кастомний blending, MeshCollider, Animator/SkinnedMeshRenderer і скрипти зміни зон. Поточні матеріали свідомо приблизні. **Unity Editor для нового коду не запускався**; C# компіляцію та вигляд PASS5 потрібно перевірити на ПК.
 
+
+## Етап 9 — Material _MainTex (18.11.2026, локальний інструмент)
+
+Повторно декодовано серіалізовані Unity 4.6.5f1 Material із sharedassets0.assets і sharedassets1.assets: **33 Material**. Із них 23 мають джерела Texture2D, декодовані як PNG (21 унікальний PNG-шлях), 2 посилаються на порожні текстури шрифтів, 8 не мають _MainTex. Оригінальні shader fileID/pathID, _MainTex fileID/pathID, _Color, _Cutoff, UV scale/offset зчитано з файлів. Посилання на текстури зіставлено з локальним індексом Reports/textures.csv. Підготовлено приватний архів Escape_2015_Stage9_Materials_Metadata.zip; перевірено його цілісність і 33 унікальні матеріальні ID.
+
+Додано самостійно написаний Unity Editor скрипт Assets/Editor/EscapeMaterialPass.cs. Він не змінює оригінальні матеріали/сцени, а створює копії тільки матеріалів із локальним PNG та застосовує їхні _MainTex, _Color і UV scale/offset до відповідних Stage8 MeshRenderer у новій Escape_Zone003_MATERIALS_PASS6.unity.
+
+**Не підтверджено:** виконання Stage 9 в Unity Editor користувача, правильність підсумкового шейдерного рендерингу та зміна Game View. Шейдери Unity 4, pixel-snap, RenderQueue, Cutoff/blend-режими та MaterialPropertyBlock не відновлюються. Попередньо — це часткова графічна реконструкція, не playable-порт.
