@@ -147,3 +147,11 @@
 Додано `tools/extract_animation_inventory.py` і `Assets/Editor/EscapeAnimationInventoryWindow.cs`, що показує локальний `escape_animation_inventory.json` у режимі **тільки читання**. Приватний архів `Escape_2015_Stage12_Animation_Inventory_Local.zip` зберігається лише для користувача, не в публічному GitHub.
 
 **Не перевірено:** компіляція Stage12 GUI в Unity Editor користувача. Не виконано конвертацію кривих/переходів і не відновлено ракету як ігровий об'єкт.
+
+## Етап 13 — декодовано OilPumpAnimation (оригінальні значення руху)
+
+Із `sharedassets1.assets` оригінального APK знайдено Unity 4.6.5f1 AnimationClip ID 394 `OilPumpAnimation` (23 164 серіалізовані байти). Виявлено `m_MuscleClip` і `StreamedClip`: 5 оригінальних GenericBinding, 14 потокових каналів, 3 сталі значення, 126 потокових кадрів (серед них sentinel -infinity/infinity), тривалість 2.0 с і sampleRate 60 Гц. 4 CRC32 path-hash зіставлено з іменами всіх відповідних Transform, результат повторно перевірено на 8 OilPump Animator-рігах (по 4 у Zone003/Zone031).
+
+У локальний `escape_oilpump_animation.json` збережено 17 FloatCurve-каналів по 121 вибірці: оригінальні потокові кубічні коефіцієнти обчислено на частоті 60 Гц, сталий блок перенесено без зміни. Значення на вузлових кадрах звірено з вихідним потоком, кватерніони нормалізовані й 2-секундна петля замикається. Приватний ZIP `Escape_2015_Stage13_OilPump_Animation_Local.zip` містить також незалежно написаний Python-екстрактор для локального відтворення метаданих.
+
+Публічний репозиторій отримав `Assets/Editor/EscapeOilPumpAnimationPass.cs`: локально імпортує Sampled AnimationClip у Unity 6, створює новий цикл AnimatorController і в новій сцені підключає його до 4 Zone003 OilPump-rigs. **Original AnimatorController state machine не реконструйовано**, runtime-логіка механізмів/фізика відсутні; це відтворення циклічного руху, а не повний ігровий об'єкт. Попередні сцени й оригінальні матеріали не перезаписуються. Unity-компіляцію та фактичне відтворення ще потрібно підтвердити на ПК.
