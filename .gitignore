@@ -36,3 +36,8 @@ RecoverySource/SceneData/
 Reports/
 __pycache__/
 *.pyc
+
+# Stage 2 generated local-only sprite metadata and cropped images
+Assets/StreamingAssets/escape_sprite_manifest.json
+Assets/RecoveredSprites/
+Assets/Scenes/Escape_Sprites_PASS1.unity
