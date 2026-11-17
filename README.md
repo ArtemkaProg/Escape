@@ -103,6 +103,21 @@
 
 **Що ще не зроблено:** не відновлено оригінальний порядок/імена шарів, MeshRenderer/MeshFilter і матеріали, Sprite pivot/geometry, Animator, MonoBehaviour, логіку зміни зон та поведінку камер. Код PASS3 ще не перевірявся запуском Unity Editor в середовищі аналізу.
 
+## Етап 7 — оригінальні pivots і полігональна форма спрайтів (PASS4)
+
+**Результат повторного читання APK:** у `sharedassets1.assets` є 89 Sprite з **702 оригінальними вершинами**. Дев'ять Sprite використовують полігональну геометрію замість простого прямокутника; їх застосовано 59 разів у сцені. Чотири Sprite мають нестандартні pivot: `gyroLight` (34 використання), `SurvivorHands` (631), `SurvivorBody` (631), `Laser` (520). Разом **1 816 використань** з неправильним pivot у попередньому імпортері.
+
+1. Збережи Unity-проєкт, закрий редактор і в корені Escape виконай `git pull origin main`.
+2. Розпакуй локальний архів **Escape_2015_Stage7_Sprite_Geometry.zip** із чату **в корінь** `D:\Unity Projects\Escape`, щоб з'явився `Assets/StreamingAssets/escape_sprite_geometry.json`. Усі попередні PNG `Assets/RecoveredSprites/escape_sprite_*.png` мають залишитися.
+   - Якщо ZIP недоступний, відтворення метаданих доступне з локальних оригінальних Unity-файлів: `py -3 tools/extract_sprite_geometry.py`.
+3. Відкрий Unity 6.0.58f2 і сцену **`Assets/Scenes/Escape_Zone001_PREVIEW.unity`** (або `Escape_Cameras_PASS3.unity` для всіх зон).
+4. Обери **Escape Recovery → 7 - Fix sprite pivots and polygons (pass 4)**.
+5. Сцена буде збережена під новим ім'ям **`Assets/Scenes/Escape_Zone001_GRAPHICS_PASS4.unity`** (або `Escape_Cameras_GRAPHICS_PASS4.unity`). Подивися Game View, без запуску Play Mode.
+
+**Як інструмент працює:** робить копію кожного з 89 наявних PNG-спрайтів у `Assets/RecoveredSpritesV2/` та встановлює оригінальні pivot із UV-трансформації. Для 9 полігональних Sprite замість прямокутного SpriteRenderer малює точно декодовані вершини/індекси через MeshFilter + MeshRenderer і `Sprites/Default`, зберігаючи індивідуальні кольори та Sorting Layer. Оригінальні PNG і PASS1/PASS2/PASS3/Zone001_PREVIEW не змінюються.
+
+**Ще не перевірено в Unity Editor на нашому комп'ютері:** компіляція інструмента і візуальний результат; перевір і надішли Console за потреби. 2D Mesh-рендер може мати відмінності шейдерів; передбачається, що оригінальні Rect/UV дані відтворено точно. Це все ще не playable-порт — оригінальні програмні компоненти, runtime-керування зонами й камерами, фізика та решта матеріалів потребують відновлення.
+
 ## Що ще потрібно до Windows-гри
 
 1. Експортувати матеріали, Mesh, Sprite, Animator і зв'язки компонентів із Unity assets.
