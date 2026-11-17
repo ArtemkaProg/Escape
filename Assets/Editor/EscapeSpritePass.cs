@@ -202,7 +202,7 @@ public static class EscapeSpritePass
         }
     }
 
-    private static Dictionary<int, GameObject> MatchExistingScene(
+    internal static Dictionary<int, GameObject> MatchExistingScene(
         EscapeSceneRebuilder.SceneData original, Scene scene)
     {
         var goById = new Dictionary<int, EscapeSceneRebuilder.GameObjectRecord>();
