@@ -277,3 +277,19 @@
 **Для повторного локального витягування:** якщо присутні `RecoverySource/OriginalUnityData/sharedassets1.assets`, `RecoverySource/Tools/unity4_reader.py`, та приватні маніфести Stage1/Stage12, виконай `py -3 tools/extract_oilpump_animation.py`. Скрипт входить до Stage13 ZIP; на GitHub зберігається редактор Unity, документація та правила ігнорування приватних даних.
 
 **Перевірка:** Python-декодер виконано на вихідному APK, JSON і ZIP перевірено; Unity Editor-скрипт `Assets/Editor/EscapeOilPumpAnimationPass.cs` завантажено, але ще **не компільовано та не запускався** в Unity 6.0.58f2. Можуть знадобитися сумісні зміни після перевірки на ПК.
+
+## Етап 14 — Rocket: оригінальні альфа-анімації і тест клавіатури (PASS9)
+
+З оригінальних файлів APK Unity 4.6.5f1 перевірені Rocket GO #27907, Animator root #19899, AnimatorController #553. Підтверджені Clips: StartEngine #397 (1 с, 8 SpriteRenderer alpha), TakingOff #398 (2 с, 0 SpriteRenderer alpha), TryingToStartTheEngine #399 (23/60 с, 8 SpriteRenderer alpha), TryingToTakeOff #400 (1 с, 8 SpriteRenderer alpha). Всього **24 придатні до перенесення альфа-криві** та **20 інших прив'язок**, що залишаються неперенесеними. Криві з Unity4 StreamedClip просемпльовано на 60 Гц і перевірено за оригінальними CRC32 path. Дані кривих доступні лише у приватному ZIP із чату, не на GitHub.
+
+Перевірка Assembly-CSharp.dll: RocketInputController використовує події OnDown/OnUp однієї кнопки тяги; RocketMovementController змінює yVelocity силою тяги та гравітації, інтегрує yPosition і пов'язаний із TargetTransform. **Точні параметри і логіка зон, зіткнення, звуки, паливо, частинки та state machine ще не перенесені.** Нове керування є самостійно написаним демонстраційним прототипом, а не оригінальною фізикою.
+
+### Як запустити
+
+1. Збережи поточну сцену (Ctrl+S, File → Save Project), закрий Unity та у Git Bash в корені Escape виконай git pull origin main.
+2. Завантаж із цього чату Escape_2015_Stage14_Rocket_Visuals_Local.zip і розпакуй у корінь D:\Unity Projects\Escape. Перевір файл Assets/StreamingAssets/escape_rocket_visual_clips.json.
+3. Відкрий Escape_Zone003_OILPUMP_ANIM_PASS8 (рекомендовано) або Escape_Zone003_BG_TUNING.
+4. Натисни **Escape Recovery → 17 - Restore rocket visuals and keyboard test (pass 9)**. Скрипт збереже окрему Escape_Zone003_ROCKET_TEST_PASS9.unity та створить 3 AnimationClip (альфа-канали), діагностичний AnimatorController, прив'яже оригінальний Rocket і тестовий клавіатурний компонент. Попередні сцени не змінюються.
+5. Натисни Play і клацни Game для фокусу. **Space / W / Up** — тримати тягу, **R** — скинути, **1/2/3** — пробні анімації світла й індикаторів; **4** — лише статус TakingOff (оригінальні script/particle bindings ще не відтворені).
+
+Приватний ZIP також містить tools/extract_rocket_animations.py для локального повторного витягування даних із оригінального APK. На GitHub розміщені тільки власні Assets/Editor/EscapeRocketPreviewPass.cs та Assets/Scripts/EscapeRocketKeyboardPreview.cs. **Unity Editor не запускався під час розробки коду** — компіляцію й рух потрібно перевірити на комп'ютері користувача.
