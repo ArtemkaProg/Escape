@@ -118,6 +118,26 @@
 
 **Ще не перевірено в Unity Editor на нашому комп'ютері:** компіляція інструмента і візуальний результат; перевір і надішли Console за потреби. 2D Mesh-рендер може мати відмінності шейдерів; передбачається, що оригінальні Rect/UV дані відтворено точно. Це все ще не playable-порт — оригінальні програмні компоненти, runtime-керування зонами й камерами, фізика та решта матеріалів потребують відновлення.
 
+
+## Етап 8 — 514 оригінальних Mesh, MeshFilter і базові матеріали (PASS5)
+
+**Підтверджено повторним розбором APK:** у вихідних Unity 4.6.5f1 серіалізованих даних є **514 Mesh** (260 у level0 і 254 у sharedassets1.assets), **3 781 MeshFilter**, **3 810 MeshRenderer** та **33 Material**. Всі 514 Mesh декодовано у 1 194 188 байтів компактної приватної геометрії: 29 785 вершин / 17 920 трикутників. Перевірені кількості, індекси, оригінальні локальні координати, нормалі, UV і вершинні кольори. Зв'язки MeshFilter → Mesh та Renderer → матеріал зчитані безпосередньо з level0. П'ять MeshFilter мають порожнє посилання m_Mesh.
+
+**Важливо:** це перший прохід геометрії, **не точне відтворення матеріалів**. Оригінальні Shader/RenderQueue/TextureBindings і анімації потребують додаткового перенесення. Поки використовується спрощений Sprites/Default із базовим _Color та вершинним кольором; текстури 3D-моделей можуть не відображатися. Зокрема велика кількість моделей використовує оригінальний матеріал Black.mat.
+
+### Як запустити
+
+1. Збережи Unity-проєкт і закрий Editor. У Git Bash, в корені Escape, виконай `git pull origin main`.
+2. Завантаж з цього чату **Escape_2015_Stage8_Meshes_Local.zip** й розпакуй у корінь `D:\Unity Projects\Escape`. Архів містить приватні `RecoverySource/MeshData/*.meshbin`, `Assets/StreamingAssets/escape_mesh_manifest.json` і `tools/extract_mesh_stage8.py`.
+3. Перевір, що під `RecoverySource/MeshData/` з'явилось **514 файлів** і є `Assets/StreamingAssets/escape_mesh_manifest.json`. Дані з APK не додавай у публічний репозиторій.
+4. Відкрий **`Assets/Scenes/Escape_Zone001_GRAPHICS_PASS4.unity`** у Unity 6.0.58f2. Обери **Escape Recovery → 8 - Restore original meshes (pass 5)**.
+5. Інструмент читає локальні файли, створює Mesh і спрощені Material у `Assets/RecoveredOriginalMeshes` і `Assets/RecoveredOriginalMaterials`, а результат зберігає в **`Assets/Scenes/Escape_Meshes_PASS5.unity`**. Попередню сцену він не перезаписує. MeshRenderer створюється на окремому дочірньому GameObject, щоб не конфліктувати зі SpriteRenderer (помилка попереднього етапу).
+6. Відкрий нову сцену PASS5 і вибери **Escape Recovery → 9 - Preview Zone003 meshes (diagnostic)**. Це створює нову `Assets/Scenes/Escape_Zone003_MESH_PREVIEW.unity`, залишає активною лише Zone003 і ставить **діагностичну**, а НЕ оригінальну камеру за межами її моделей. Вкладка **Game** дозволить побачити структуру; 16:9 корисно для цього тесту.
+
+**Чому Zone003:** оригінальна Zone003 містить приблизно 1 276 MeshFilter, Endless — 1 143, а Zone001 майже не містить статичних мешів. Тому саме Zone003 дозволить перевірити результат імпорту.
+
+За наявності вихідного `RecoverySource/OriginalUnityData` і `unity4_reader.py` в архіві також є власний локальний Python-екстрактор, який може повторно відтворити файли Stage8. **Реальний запуск коду PASS5 в Unity Editor ще не перевірено**, тому у разі помилок надішли повний лог з Console.
+
 ## Що ще потрібно до Windows-гри
 
 1. Експортувати матеріали, Mesh, Sprite, Animator і зв'язки компонентів із Unity assets.
