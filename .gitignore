@@ -98,3 +98,11 @@ Assets/Scenes/Escape_Zone003_MATERIALS_PASS6*.unity.meta
 # User-adjusted, private diagnostic framing for PC
 Assets/Scenes/Escape_Zone003_FRAMING_TUNED*.unity
 Assets/Scenes/Escape_Zone003_FRAMING_TUNED*.unity.meta
+
+# Stage 10 - private original shader/material metadata and derived preview
+Assets/StreamingAssets/escape_shader_manifest.json
+Assets/StreamingAssets/escape_shader_manifest.json.meta
+Assets/RecoveredShaderMaterialsStage10/
+Assets/RecoveredShaderMaterialsStage10.meta
+Assets/Scenes/Escape_Zone003_SHADERS_PASS7*.unity
+Assets/Scenes/Escape_Zone003_SHADERS_PASS7*.unity.meta
