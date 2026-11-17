@@ -126,6 +126,12 @@ def convert(project_root: Path, dry_run: bool = False, force: bool = False):
         ) from exc
 
     from ETCImagePlugin import TextureType
+    try:
+        import texture2ddecoder  # fast, optional C/C++ decoder
+        print("ETC2 backend: texture2ddecoder (native, fast)")
+    except ImportError:
+        texture2ddecoder = None
+        print("ETC2 backend: ETCImagePlugin (pure Python, considerably slower)")
 
     output_dir = project_root / "Assets" / "RecoveredTextures"
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -143,10 +149,16 @@ def convert(project_root: Path, dry_run: bool = False, force: bool = False):
         else:
             # ETC blocks are in Unity's bottom-left raster order.
             # The existing extracted PNGs were vertically flipped too.
-            img = Image.frombytes(
-                "RGBA", (width, height), blocks, "ETC",
-                TextureType.ETC2PACKAGE_RGBA_NO_MIPMAPS
-            )
+            if texture2ddecoder is not None:
+                pixels = texture2ddecoder.decode_etc2a8(blocks, width, height)
+                if len(pixels) != width * height * 4:
+                    raise ValueError("Native decoder returned wrong pixel count")
+                img = Image.frombytes("RGBA", (width, height), pixels, "raw", "BGRA")
+            else:
+                img = Image.frombytes(
+                    "RGBA", (width, height), blocks, "ETC",
+                    TextureType.ETC2PACKAGE_RGBA_NO_MIPMAPS
+                )
             img = ImageOps.flip(img)
             temporary = target.with_name(target.name + ".tmp")
             try:
