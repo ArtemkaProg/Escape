@@ -255,3 +255,25 @@
 
 **Наступний етап:** не просто відтворити назви, а конвертувати ключові AnimationClip (спершу Rocket/OilPump), відновити графи потрібних AnimatorController і окремо перенести оригінальну поведінку RocketInputController / RocketMovementController під керування клавіатурою ПК. Не підміняти її припущеннями без підтверджених даних.
 
+
+## Етап 13 — перша справжня анімація: OilPumpAnimation (PASS8)
+
+**Що підтверджено прямим декодуванням із APK:** оригінальний `OilPumpAnimation` у `sharedassets1.assets` (Unity 4.6.5f1, fileID 1/pathID 394) має двосекундний зациклений рух при 60 кадрах/с. Звичайні списки кривих порожні: рух закодовано в `m_MuscleClip` → `StreamedClip`. Там **14 анімованих каналів** і **3 сталі канали**, згруповані у 5 прив'язок Transform: положення `RopeAndCounterWeights/CounterWeight`, положення `RopeAndCounterWeights`, обертання `ArmPendular`, обертання й положення `ArmPendular/Plane2032`.
+
+Числові path hash зіставлені з іменами через CRC32 і перевірені на восьми реальних ієрархіях `SubAnimRoot`: **4 OilPump у Zone003** і 4 у Zone031. За вихідними кубічними коефіцієнтами згенеровано **17 кривих по 121 відліку** з кроком 1/60 секунди. Кватерніони обертання перевірено на нормалізованість, усі вибірки скінченні, а початок і кінець циклу збігаються.
+
+**Це відновлені значення руху, але не оригінальний AnimatorController.** Для демонстрації створюється власний простий зациклений контролер Unity 6, без оригінальних переходів станів, фізики й взаємодії корабля/помпи. Пересемплювання при 60 Гц може дещо відрізнятися від первісної інтерполяції між ключами.
+
+### Як запустити
+
+1. Збережи налаштування `Escape_Zone003_BG_TUNING.unity` (Ctrl+S і **File → Save Project**) та закрий Unity.
+2. У папці проєкту виконай `git pull origin main`.
+3. Завантаж із чату локальний архів **Escape_2015_Stage13_OilPump_Animation_Local.zip**, розпакуй у корінь `D:\Unity Projects\Escape`. З'являться `Assets/StreamingAssets/escape_oilpump_animation.json` та `tools/extract_oilpump_animation.py`. Це **дані користувацького APK**, тому архів не публікується у GitHub.
+4. Відкрий **Escape_Zone003_BG_TUNING** (або `Escape_Zone003_SHADERS_PASS7`, якщо BG_TUNING недоступна).
+5. Запусти **Escape Recovery → 16 - Restore OilPump animation (pass 8)**. Скрипт створить **окрему** `Assets/Scenes/Escape_Zone003_OILPUMP_ANIM_PASS8.unity`, AnimationClip і простий AnimatorController у `Assets/RecoveredOilPumpAnimationStage13/`. Він не змінює попередні сцени.
+6. У новій сцені натисни **Play**. Очікується зациклений рух чотирьох помп у Zone003; ракурс і фони залишаться такими, як у збереженій сцені.
+7. Подивися Console і зроби скриншот Game View. Якщо самих рухів не видно, перевір активність `Zone003/Zone/AnimationRoot/SubAnimated/OilPump*/SubAnimRoot`, наявність Animator на цих об'єктах та повідомлення про імпорт.
+
+**Для повторного локального витягування:** якщо присутні `RecoverySource/OriginalUnityData/sharedassets1.assets`, `RecoverySource/Tools/unity4_reader.py`, та приватні маніфести Stage1/Stage12, виконай `py -3 tools/extract_oilpump_animation.py`. Скрипт входить до Stage13 ZIP; на GitHub зберігається редактор Unity, документація та правила ігнорування приватних даних.
+
+**Перевірка:** Python-декодер виконано на вихідному APK, JSON і ZIP перевірено; Unity Editor-скрипт `Assets/Editor/EscapeOilPumpAnimationPass.cs` завантажено, але ще **не компільовано та не запускався** в Unity 6.0.58f2. Можуть знадобитися сумісні зміни після перевірки на ПК.
