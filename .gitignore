@@ -94,3 +94,7 @@ Assets/RecoveredMaterialTexturesStage9/
 Assets/RecoveredMaterialTexturesStage9.meta
 Assets/Scenes/Escape_Zone003_MATERIALS_PASS6*.unity
 Assets/Scenes/Escape_Zone003_MATERIALS_PASS6*.unity.meta
+
+# User-adjusted, private diagnostic framing for PC
+Assets/Scenes/Escape_Zone003_FRAMING_TUNED*.unity
+Assets/Scenes/Escape_Zone003_FRAMING_TUNED*.unity.meta
