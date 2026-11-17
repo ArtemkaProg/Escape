@@ -48,3 +48,12 @@ Assets/Scenes/Escape_Cameras_PASS3.unity
 Assets/Scenes/Escape_Zone001_PREVIEW.unity
 ProjectSettings/TagManager.asset
 UserSettings/TagManager_before_Escape_PASS3.asset
+
+# Unity-generated meta files adjacent to ignored recovery artifacts
+Assets/StreamingAssets/escape_camera_manifest.json.meta
+Assets/Scenes/Escape_Cameras_PASS3.unity.meta
+Assets/Scenes/Escape_Zone001_PREVIEW.unity.meta
+Assets/Scenes/Escape_Sprites_PASS1.unity.meta
+Assets/Scenes/Escape_Sprites_PASS2.unity.meta
+Assets/StreamingAssets/escape_sprite_manifest.json.meta
+Assets/RecoveredSprites.meta
