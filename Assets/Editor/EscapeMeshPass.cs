@@ -369,7 +369,7 @@ public static class EscapeMeshPass
 
     // Relies on the exact original hierarchy order. Stage 7 adds only
     // __EscapeRecoveredPolygon children; these are skipped during ID matching.
-    private static Dictionary<int, GameObject> MatchSceneAllowGeneratedChildren(
+    internal static Dictionary<int, GameObject> MatchSceneAllowGeneratedChildren(
         EscapeSceneRebuilder.SceneData original, Scene scene)
     {
         var objects = new Dictionary<int, EscapeSceneRebuilder.GameObjectRecord>();
@@ -392,6 +392,7 @@ public static class EscapeMeshPass
         foreach (GameObject go in scene.GetRootGameObjects())
         {
             if (go.name == "Recovery preview camera" ||
+                go.name == "Stage8 Zone003 diagnostic camera" ||
                 go.name.StartsWith("[ARCHIVAL RECONSTRUCTION", StringComparison.Ordinal))
                 continue;
             if (roots.ContainsKey(go.name))
@@ -428,7 +429,8 @@ public static class EscapeMeshPass
 
             var found = new List<Transform>();
             foreach (Transform ch in pair.Value)
-                if (ch.name != "__EscapeRecoveredPolygon")
+                if (ch.name != "__EscapeRecoveredPolygon" &&
+                    ch.name != "__EscapeRecoveredMesh")
                     found.Add(ch);
 
             if (found.Count != expected.Count)
