@@ -60,6 +60,31 @@
 
 Обмеження: **ETC2 (3 179 рендерерів), MeshRenderer, MeshFilter, Animator, камери, sorting layer і логіка гри** на цьому кроці не відновлюються. Первинна сцена **не перезаписується**. Кольори та `sortingOrder` із SpriteRenderer зчитані з APK, але користувацькі назви шарів сортування ще не встановлені. Код інструмента не компілювався у Unity Editor у середовищі аналізу — перевір помилки Console. Якщо зіставлення ієрархії не збігається, імпортер зупиниться до зміни сцени.
 
+## Етап 5 — ETC2 для Windows: ще 58 спрайтів
+
+**Мета:** декодувати 12 оригінальних ETC2_RGBA8 KTX-текстур у локальні PNG та додати їх до вже створеної сцени `Escape_Sprites_PASS1`. Інструменти: `tools/decode_etc2_stage5.py` і `Escape Recovery → 4 - Restore ETC2 sprites (visual pass 2)`.
+
+1. **Збережи** створені тобою сцени, закрий Unity, онови репозиторій: `git pull origin main`.
+2. Переконайся, що 12 KTX є в одному з місць:
+   - `RecoverySource/RawTextures/*.ktx`
+   - `RecoveredEscapeUnity/RecoverySource/RawTextures/*.ktx` (якщо папка залишилася всередині проєкту).
+   
+   Якщо їх немає, розпакуй **Escape_2015_Stage5_ETC2_Local_Data.zip**, виданий у чаті, **прямо в корінь** репозиторію `Escape/`; у ньому вже правильна структура папок. Не додавай KTX у публічний GitHub.
+3. У терміналі Git Bash / PowerShell, у папці `Escape`, виконай:
+
+   ```bash
+   py -3 -m pip install Pillow texture2ddecoder
+   py -3 tools/decode_etc2_stage5.py --dry-run
+   py -3 tools/decode_etc2_stage5.py
+   ```
+
+   **Один раз** інсталюй ці Python-пакети. Якщо `texture2ddecoder` недоступний, достатньо `Pillow`: скрипт має повільніший запасний Python-декодер (`tools/vendor/ETCImagePlugin.py`, із зазначенням авторства). Стиснені текстури залишаються локальними.
+4. Після успішної конвертації з'являться 12 додаткових PNG у `Assets/RecoveredTextures/`; локальний `Assets/StreamingAssets/escape_sprite_manifest.json` буде оновлено.
+5. Відкрий Unity та **`Assets/Scenes/Escape_Sprites_PASS1.unity`**. Обери **`Escape Recovery → 4 - Restore ETC2 sprites (visual pass 2)`**.
+6. Unity має зберегти результат у новій **`Assets/Scenes/Escape_Sprites_PASS2.unity`**, не перезаписуючи сцени `PASS1` чи `STRUCTURE`. Перевір Console, якщо є помилки.
+
+**Точність і обмеження:** підтверджено цілісність усіх 12 KTX та відповідність усім 58 Sprite ID; саму конвертацію й Stage 5 редакторський скрипт у Unity на цьому комп'ютері ще не виконували. Кількість відновлених SpriteRenderer — очікувана, а не підтверджена успішною Unity-збіркою. Повне відтворення сцени потребує відновлення мешів, камер, шейдерів, пріоритетів шарів, анімацій та логіки.
+
 ## Що ще потрібно до Windows-гри
 
 1. Експортувати матеріали, Mesh, Sprite, Animator і зв'язки компонентів із Unity assets.
