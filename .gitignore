@@ -82,3 +82,7 @@ Assets/Scenes/Escape_Meshes_PASS5.unity
 Assets/Scenes/Escape_Meshes_PASS5.unity.meta
 Assets/Scenes/Escape_Zone003_MESH_PREVIEW.unity
 Assets/Scenes/Escape_Zone003_MESH_PREVIEW.unity.meta
+
+# Diagnostic Game camera matching (original Zone003 preview stays untouched)
+Assets/Scenes/Escape_Zone003_CAMERA_MATCH*.unity
+Assets/Scenes/Escape_Zone003_CAMERA_MATCH*.unity.meta
