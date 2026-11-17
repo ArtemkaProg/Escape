@@ -86,3 +86,11 @@ Assets/Scenes/Escape_Zone003_MESH_PREVIEW.unity.meta
 # Diagnostic Game camera matching (original Zone003 preview stays untouched)
 Assets/Scenes/Escape_Zone003_CAMERA_MATCH*.unity
 Assets/Scenes/Escape_Zone003_CAMERA_MATCH*.unity.meta
+
+# Stage 9: user-local original material metadata and derivative material previews
+Assets/StreamingAssets/escape_material_manifest.json
+Assets/StreamingAssets/escape_material_manifest.json.meta
+Assets/RecoveredMaterialTexturesStage9/
+Assets/RecoveredMaterialTexturesStage9.meta
+Assets/Scenes/Escape_Zone003_MATERIALS_PASS6*.unity
+Assets/Scenes/Escape_Zone003_MATERIALS_PASS6*.unity.meta
