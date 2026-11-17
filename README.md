@@ -230,3 +230,28 @@
 6. Натисни **Save background-tuning preview**. Щоб відмовитися від експерименту, відкрий SHADERS_PASS7 — він залишається незмінним.
 
 Поточні значення 1.08 / 0.06 — лише делікатна **гіпотеза для ручного підбору**; не підтверджені оригінальними файлами APK. Оригінальний колірний простір Unity Editor, fog/post-processing і шейдерний порядок відображення ще потрібно перевіряти окремо. Інструмент створено в GitHub, але **його компіляцію/рендер у Unity на ПК користувача поки не перевірено**.
+
+## Етап 12 — точний інвентар анімацій і керування кораблем
+
+Після завершення візуального проходу Zone003 **не перезаписуй** створені сцени `Escape_Zone003_SHADERS_PASS7` та `Escape_Zone003_BG_TUNING`: їх уже можна використовувати як референс для порту.
+
+З оригінальних файлів **Unity 4.6.5f1** перевірено:
+- **152 AnimationClip** (151 у sharedassets1.assets та 1 у sharedassets0.assets);
+- **108 AnimatorController** (107 + 1);
+- **1 408 компонентів Animator** в level0 — **824** мають правильне посилання на AnimatorController, **584** залишені без контролера;
+- окремі кліпи на кшталт `OilPumpAnimation`, `StartEngine`, `TakingOff`, `TryingToTakeOff`, `anim_RocketDoor_opening`;
+- контролери `Rocket`, `OilPump`, `DoorController`, `EngineSound`, `RocketFuelBar`;
+- класи у Assembly-CSharp.dll: `RocketInputController` (OnDown / OnUp), `RocketMovementController` (UpdateVelocity / UpdatePosition / UpdateOrientation), `RocketFuelController`, `RocketAnimatorController`.
+
+**Це інвентар, а не готові анімації!** Імена, оригінальні fileID/pathID і зв’язки компонентів перевірені, але криві AnimationClip, графи станів AnimatorController, серіалізовані поля і реальна фізика/керування ракетою ще потребують відновлення. Не можна вважати, що однойменний кліп автоматично належить однойменному контролеру.
+
+### Перевірка в Unity
+
+1. Збережи поточну сцену і матеріали (Ctrl+S, File → Save Project), закрий Unity. Запусти `git pull origin main` у папці проєкту.
+2. Розпакуй приватний **Escape_2015_Stage12_Animation_Inventory_Local.zip** із чату в корінь `D:\Unity Projects\Escape`. Має з’явитися `Assets/StreamingAssets/escape_animation_inventory.json`.
+3. Відкрий будь-яку відновлену сцену Unity і вибери **Escape Recovery → 15 - Inspect original animations and rocket (read-only)**.
+4. У новому вікні шукай `Rocket`, `OilPump`, `Engine`, `TakingOff` або `Zone003`. Перемикай вкладки Clips, Controllers, Scene Animators, Rocket Methods. Вікно не змінює сцени.
+5. За наявності оригінального повного локального архіву дані можна згенерувати повторно: `py -3 tools/extract_animation_inventory.py`.
+
+**Наступний етап:** не просто відтворити назви, а конвертувати ключові AnimationClip (спершу Rocket/OilPump), відновити графи потрібних AnimatorController і окремо перенести оригінальну поведінку RocketInputController / RocketMovementController під керування клавіатурою ПК. Не підміняти її припущеннями без підтверджених даних.
+
