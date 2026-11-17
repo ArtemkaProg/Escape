@@ -27,6 +27,7 @@ public static class EscapeSpritePass
         public int id;
         public string name;
         public string texturePath;
+        public string sourceStatus;
         public float[] textureRect;
         public float pixelsPerUnit;
     }
@@ -45,6 +46,17 @@ public static class EscapeSpritePass
 
     [MenuItem("Escape Recovery/3 - Restore 2D SpriteRenderers (visual pass 1)")]
     public static void RestoreSprites()
+    {
+        RestoreSpritesInternal(false);
+    }
+
+    [MenuItem("Escape Recovery/4 - Restore ETC2 sprites (visual pass 2)")]
+    public static void RestoreEtc2Sprites()
+    {
+        RestoreSpritesInternal(true);
+    }
+
+    private static void RestoreSpritesInternal(bool pass2)
     {
         if (EditorApplication.isPlaying)
         {
@@ -72,11 +84,22 @@ public static class EscapeSpritePass
             return;
         }
 
-        if (!EditorUtility.DisplayDialog("Escape: restore sprites",
-            "This will attempt to link SpriteRenderers to the original 35k-object " +
-            "scene using a verified hierarchy mapping. It saves a NEW scene " +
-            "Escape_Sprites_PASS1.unity and does not overwrite the structural scene.\n\n" +
-            "Textures still in ETC2 will be skipped for now. Continue?", "Restore sprites", "Cancel"))
+        if (pass2 && !scene.name.StartsWith("Escape_Sprites_PASS", StringComparison.Ordinal))
+        {
+            EditorUtility.DisplayDialog("Open visual pass 1",
+                "First open Assets/Scenes/Escape_Sprites_PASS1.unity so the already " +
+                "restored sprites are preserved. The structural scene stays unchanged.", "OK");
+            return;
+        }
+        string outputScene = pass2 ? "Assets/Scenes/Escape_Sprites_PASS2.unity"
+                                   : "Assets/Scenes/Escape_Sprites_PASS1.unity";
+        if (!EditorUtility.DisplayDialog(pass2 ? "Escape: ETC2 pass 2" : "Escape: restore sprites",
+            "This matches SpriteRenderers to the original 35k-object scene and saves " +
+            "a NEW scene: " + outputScene + ".\n\n" +
+            (pass2 ? "First run tools/decode_etc2_stage5.py so your local manifest " +
+                     "contains decoded_etc2_png sprite paths. Continue?" :
+                     "Textures still in ETC2 will be skipped for now. Continue?"),
+            "Restore sprites", "Cancel"))
             return;
 
         try
@@ -86,6 +109,17 @@ public static class EscapeSpritePass
             var manifest = JsonUtility.FromJson<SpriteManifest>(File.ReadAllText(spritesPath));
             if (sceneData == null || manifest == null || manifest.sprites == null || manifest.renderers == null)
                 throw new InvalidDataException("Invalid or incomplete recovery JSON.");
+            if (pass2)
+            {
+                int decodedEtc2 = 0;
+                foreach (var spriteInfo in manifest.sprites)
+                    if (!string.IsNullOrEmpty(spriteInfo.texturePath) &&
+                        spriteInfo.sourceStatus == "decoded_etc2_png")
+                        decodedEtc2++;
+                if (decodedEtc2 == 0)
+                    throw new InvalidDataException("No ETC2 PNGs in the local manifest. " +
+                        "Run py -3 tools/decode_etc2_stage5.py first.");
+            }
 
             // Match original IDs to CURRENT Unity GameObjects before making any changes.
             // The Stage 1 rebuilder preserves root names and child sibling order.
@@ -141,7 +175,6 @@ public static class EscapeSpritePass
             if (applied == 0)
                 throw new InvalidOperationException("No SpriteRenderers were linked. Check PNG extraction and manifest paths.");
 
-            const string outputScene = "Assets/Scenes/Escape_Sprites_PASS1.unity";
             EditorUtility.DisplayProgressBar("Escape graphics", "Saving new preview scene...", 0.96f);
             if (!EditorSceneManager.SaveScene(scene, outputScene, false))
                 throw new IOException("Unity failed to save " + outputScene);
@@ -153,7 +186,7 @@ public static class EscapeSpritePass
             EditorUtility.DisplayDialog("Visual pass 1 complete",
                 "Sprite images created: " + sourceSuccess + " / " + manifest.sprites.Length +
                 "\nSpriteRenderers assigned: " + applied + " / " + manifest.renderers.Length +
-                "\nMissing / compressed: " + skipped +
+                "\nSkipped SpriteRenderers: " + skipped +
                 "\n\nSaved: " + outputScene +
                 "\n\nThis is still NOT a playable reconstruction. ETC2 images, meshes, cameras, " +
                 "sorting layers, shaders, animations and gameplay remain incomplete.", "OK");
