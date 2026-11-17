@@ -129,6 +129,8 @@ public static class EscapeSpriteGeometryPass
 
             // A strict, source-derived mapping avoids assigning a polygon to the
             // wrong GameObject even when thousands of objects have the same name.
+            // Reopen the original preview after a failed run: this scene may have
+            // unsaved partial edits, but we never save them to the prior scene.
             var mappedObjects = EscapeSpritePass.MatchExistingScene(hierarchy, scene);
 
             EnsureFolder(FixedSpriteDir);
@@ -234,15 +236,31 @@ public static class EscapeSpriteGeometryPass
                 Mesh polygon;
                 if (polygonMeshById.TryGetValue(rec.spriteId, out polygon))
                 {
-                    // SpriteRenderer's rectangular rendering was incorrect for
-                    // the original "tight" polygons. Preserve its data, but
-                    // render the exact original mesh through MeshRenderer.
-                    MeshFilter mf = go.GetComponent<MeshFilter>();
-                    if (mf == null) mf = go.AddComponent<MeshFilter>();
-                    mf.sharedMesh = polygon;
+                    // Unity disallows MeshFilter/MeshRenderer next to an
+                    // existing SpriteRenderer on the SAME GameObject.
+                    // Keep the original SpriteRenderer on the parent for
+                    // inspection, and render polygon geometry on a child.
+                    const string polygonChildName = "__EscapeRecoveredPolygon";
+                    if (go.transform.Find(polygonChildName) != null)
+                        throw new InvalidOperationException(
+                            "Polygon child already exists on " + go.name +
+                            ". Reopen the unmodified Stage 6 scene before rerunning PASS4.");
 
-                    MeshRenderer mr = go.GetComponent<MeshRenderer>();
-                    if (mr == null) mr = go.AddComponent<MeshRenderer>();
+                    bool wasVisible = sr.enabled;
+                    var polygonObject = new GameObject(polygonChildName);
+                    polygonObject.layer = go.layer;
+                    polygonObject.transform.SetParent(go.transform, false);
+                    polygonObject.transform.localPosition = Vector3.zero;
+                    polygonObject.transform.localRotation = Quaternion.identity;
+                    polygonObject.transform.localScale = Vector3.one;
+
+                    MeshFilter mf = polygonObject.AddComponent<MeshFilter>();
+                    MeshRenderer mr = polygonObject.AddComponent<MeshRenderer>();
+                    if (mf == null || mr == null)
+                        throw new InvalidOperationException(
+                            "Unity could not attach MeshFilter/MeshRenderer to " +
+                            polygonObject.name + " on " + go.name);
+                    mf.sharedMesh = polygon;
                     string matPath = MeshDir + "/escape_mat_" + rec.spriteId +
                         "_" + rec.goId + ".mat";
                     Material material = AssetDatabase.LoadAssetAtPath<Material>(matPath);
@@ -260,7 +278,7 @@ public static class EscapeSpriteGeometryPass
                     mr.sharedMaterial = material;
                     mr.sortingLayerID = sr.sortingLayerID;
                     mr.sortingOrder = sr.sortingOrder;
-                    mr.enabled = sr.enabled;
+                    mr.enabled = wasVisible;
                     sr.enabled = false;
                     polygonsApplied++;
                 }
