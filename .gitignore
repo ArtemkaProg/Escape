@@ -172,3 +172,6 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 /Assets/RecoveredSurvivorsPass17Local/
 /Assets/RecoveredSurvivorsPass17Local.meta
 /Assets/Scenes/Escape_Zone003_PC_SURVIVORS_PASS17*.unity*
+
+# PASS18 local bugfix scene
+/Assets/Scenes/Escape_Zone003_PC_BUGFIX_PASS18*.unity*

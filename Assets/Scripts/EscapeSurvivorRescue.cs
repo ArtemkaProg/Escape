@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>Recovered attraction events and local-zone rescued counter.</summary>
-[DefaultExecutionOrder(250)]
+[DefaultExecutionOrder(350)]
 public sealed class EscapeSurvivorRescue : MonoBehaviour
 {
     [Serializable] public class Track
@@ -50,6 +50,7 @@ public sealed class EscapeSurvivorRescue : MonoBehaviour
             if(on && !g.wasOn)foreach(var p in g.members)if(p.State==0 && !p.Dead)p.SetFalling(g.state==5);
             g.wasOn=on;
         }
+        foreach(var p in people)p.SampleAnimatedMotion(dt);
         Physics.SyncTransforms();
         Vector3 center=probe.transform.TransformPoint(probe.center),scale=probe.transform.lossyScale;
         float radius=probe.radius*Mathf.Max(Mathf.Abs(scale.x),Mathf.Abs(scale.y),Mathf.Abs(scale.z));
