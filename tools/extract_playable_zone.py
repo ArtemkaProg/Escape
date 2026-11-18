@@ -50,7 +50,7 @@ def extract(project, output):
     assert gos[15787]['name'] == 'Zone003' and gos[27907]['name'] == 'Rocket'
     assert next(n for n in nodes if n['id'] == 27907)['tag'] == 6
 
-    # Serialized TagManager custom tags follow the five built-in Unity4 tags.
+    # Unity serialized custom tags use 20000 + the TagManager index.
     tagobj = next(o for o in main.objects if o['class_id'] == 78)
     r = Reader(main.data[tagobj['offset']:tagobj['offset'] + tagobj['size']], '<')
     tags = [r.aligned_string() for _ in range(r.i32())]
@@ -66,7 +66,7 @@ def extract(project, output):
             if p in rb_go: owner = p; break
             p = parent.get(p, 0)
         tag = next(n['tag'] for n in nodes if n['id'] == owner)
-        return tag >= 5 and tag - 5 < len(tags) and tags[tag - 5] in safe_tags
+        return tag >= 20000 and tag - 20000 < len(tags) and tags[tag - 20000] in safe_tags
 
     colliders = []
     for o in level.objects:

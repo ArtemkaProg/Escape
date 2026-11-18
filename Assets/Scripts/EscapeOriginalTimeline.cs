@@ -35,6 +35,7 @@ public sealed class EscapeOriginalTimeline : MonoBehaviour
     }
     public float duration, speed;
     public Track[] tracks;
+    public EscapePumpRigPlayback pumpRig;
 
     public void ResetTimeline()
     {
@@ -73,6 +74,7 @@ public sealed class EscapeOriginalTimeline : MonoBehaviour
                     if (t.target.gameObject.activeSelf != active) t.target.gameObject.SetActive(active);
                     break;
                 case 5:
+                    if (pumpRig != null) break;
                     if (t.pump == null) break;
                     bool run = c[0].Evaluate(time) >= .5f;
                     if (run && !t.pumpPlaying) { t.pump.enabled = true; t.pump.Play(0, 0, 0); t.pump.Update(0); }
@@ -81,5 +83,6 @@ public sealed class EscapeOriginalTimeline : MonoBehaviour
                     break;
             }
         }
+        if (pumpRig != null) pumpRig.Evaluate(time);
     }
 }

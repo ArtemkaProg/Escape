@@ -147,3 +147,8 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 /Assets/RecoveredPlayablePass12Local/
 /Assets/RecoveredPlayablePass12Local.meta
 /Assets/Scenes/Escape_Zone003_PC_PLAYABLE_PASS12*.unity*
+
+# PASS13 private pump constraints, phase data and corrected scene
+/Assets/RecoveredPumpRigsPass13Local/
+/Assets/RecoveredPumpRigsPass13Local.meta
+/Assets/Scenes/Escape_Zone003_PC_PUMPS_PASS13*.unity*
