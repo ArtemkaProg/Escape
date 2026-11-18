@@ -16,6 +16,7 @@ public sealed class EscapeRecoveredRocketMotion : MonoBehaviour
     public float angularAmplitudeReduction, rotationInertia;
     public Animator visualAnimator;
     public Transform targetReference;
+    public bool managedExternally;
     public float VerticalVelocity { get; private set; }
     public Vector2 MeasuredVelocity { get; private set; }
     public float VerticalPosition { get; private set; }
@@ -51,6 +52,7 @@ public sealed class EscapeRecoveredRocketMotion : MonoBehaviour
 
     private void Update()
     {
+        if (managedExternally) return;
         if (ResetPressed()) ResetFlight();
         if (visualAnimator == null) return;
         if (ClipPressed(1)) PlayVisual("TryingToStartTheEngine");
@@ -66,9 +68,16 @@ public sealed class EscapeRecoveredRocketMotion : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (managedExternally) return;
         float dt = Time.deltaTime;
         if (dt <= 0) return;
         bool thrust = DiagnosticThrustOverride ?? ThrustHeld();
+        Advance(dt, thrust);
+    }
+
+    public void Advance(float dt, bool thrust)
+    {
+        if (dt <= 0) return;
         if (thrust && !engineStarted)
         {
             engineStarted = true;
@@ -98,6 +107,7 @@ public sealed class EscapeRecoveredRocketMotion : MonoBehaviour
 
     private void OnGUI()
     {
+        if (managedExternally) return;
         GUI.Box(new Rect(12, 12, 640, 88), "Escape PASS11 — recovered art and movement / diagnostic");
         GUI.Label(new Rect(24, 36, 620, 22), "Space / W / Up: thrust | R: reset | 1 / 2 / 3: original visual clips");
         GUI.Label(new Rect(24, 59, 620, 30), "Vertical speed: " + VerticalVelocity.ToString("F2") +

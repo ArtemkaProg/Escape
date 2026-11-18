@@ -142,3 +142,8 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 /Assets/RecoveredRocketPass11Local.meta
 /Assets/Scenes/Escape_Zone003_ROCKET_RECOVERED_PASS11*.unity*
 /RecoveredEscapeUnity/
+
+# PASS12 private original timeline, colliders and PC scenes
+/Assets/RecoveredPlayablePass12Local/
+/Assets/RecoveredPlayablePass12Local.meta
+/Assets/Scenes/Escape_Zone003_PC_PLAYABLE_PASS12*.unity*
