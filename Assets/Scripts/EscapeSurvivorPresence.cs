@@ -5,5 +5,6 @@ using UnityEngine;
 public sealed class EscapeSurvivorPresence : MonoBehaviour
 {
     public GameObject survivor;
-    public bool HereAndAlive => survivor != null && survivor.activeInHierarchy;
+    public EscapeRecoveredSurvivor actor;
+    public bool HereAndAlive => actor != null ? actor.HereAndAlive : survivor != null && survivor.activeInHierarchy;
 }
