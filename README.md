@@ -323,3 +323,8 @@
 5. Надішли результати G та C. Якщо кольорові артефакти зникають тільки від G, наступним етапом виправляємо саме атлас/шейдер скла й паливних індикаторів; якщо від C — перевіряємо зайві collider sprite layers. Якщо не зникають — повертаємося до ETC2 PNG/UV/матеріалів основного корпусу. Оригінальні текстури не переписуємо без підтвердження.
 
 **Статус:** вихідна формула нахилу, оригінальна структура, TextureID 32 і код попереднього тесту підтверджені. Команда №18 і демонстраційний нахил нові, тому компіляцію та поведінку Unity 6.0.58f2 потрібно ще перевірити на ПК. Це **не завершене відновлення фізики та візуалу ракети**, а ізольована діагностика й перший крок до правильного нахилу.
+
+
+### PASS14 — laser and rocket effects
+
+Recovered the original ASTC UFO laser, both native rocket trails, proximity-driven door and independent fuel-light ownership. Windows preview: `Builds/Windows-PASS14/Escape-PASS14.exe` (local only). [Details and remaining work](Docs/PASS14_ROCKET_EFFECTS_UA.md). Smoke/fire/fog and survivor AI remain pending; Zone003 has no original FuelEvent.

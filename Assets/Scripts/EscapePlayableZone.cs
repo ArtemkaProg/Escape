@@ -22,6 +22,7 @@ public sealed class EscapePlayableZone : MonoBehaviour
     public float ZoneTime { get; private set; }
     public int DeathCount { get; private set; }
     public string LastHit { get; private set; }
+    public bool Thrusting { get; private set; }
     public bool? ThrustOverride { get; set; }
     public bool HoldMotionForAudit { get; set; }
     public bool InvincibleForAudit { get; set; }
@@ -39,6 +40,7 @@ public sealed class EscapePlayableZone : MonoBehaviour
     {
         rocketBody.isKinematic = true;
         ZoneTime = 0;
+        Thrusting = false;
         timeline.ResetTimeline();
         rocket.ResetFlight();
         LastHit = "";
@@ -94,7 +96,8 @@ public sealed class EscapePlayableZone : MonoBehaviour
         float dt = Time.deltaTime;
         ZoneTime = Mathf.Min(ZoneTime + dt * timeline.speed, timeline.duration);
         timeline.Evaluate(ZoneTime, true);
-        if (!HoldMotionForAudit) rocket.Advance(dt, ThrustOverride ?? ThrustHeld());
+        Thrusting = ThrustOverride ?? ThrustHeld();
+        if (!HoldMotionForAudit) rocket.Advance(dt, Thrusting);
         FollowCamera();
         Bounds b = rocketBounds.bounds;
         float distance = gameCamera.WorldToViewportPoint(rocketBounds.transform.position).z;

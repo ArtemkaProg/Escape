@@ -152,3 +152,8 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 /Assets/RecoveredPumpRigsPass13Local/
 /Assets/RecoveredPumpRigsPass13Local.meta
 /Assets/Scenes/Escape_Zone003_PC_PUMPS_PASS13*.unity*
+
+# PASS14 private recovered laser, trails and scene
+/Assets/RecoveredEffectsPass14Local/
+/Assets/RecoveredEffectsPass14Local.meta
+/Assets/Scenes/Escape_Zone003_PC_EFFECTS_PASS14*.unity*
