@@ -136,3 +136,9 @@ Assets/Scenes/Escape_Zone003_ROCKET_TEST_PASS9*.unity.meta
 # Stage 15: isolated on-PC diagnostic scene (no original sprite content)
 Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity
 Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
+
+# PASS11: private ASTC derivatives and scenes; nested private recovery archive
+/Assets/RecoveredRocketPass11Local/
+/Assets/RecoveredRocketPass11Local.meta
+/Assets/Scenes/Escape_Zone003_ROCKET_RECOVERED_PASS11*.unity*
+/RecoveredEscapeUnity/

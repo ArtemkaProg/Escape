@@ -44,6 +44,14 @@ def find_ktx_directory(project_root: Path) -> Path:
 
 
 def parse_ktx(path: Path):
+    # Legacy recovery labelled Unity ASTC format 54 as ETC2 in its KTX header.
+    # Refuse the known bad rocket export before it can replace source PNGs.
+    if "fmt54" in path.name:
+        raise ValueError(
+            "Legacy KTX contains ASTC_RGBA_4x4, not ETC2. "
+            "Use tools/recover_rocket_pass11.py with original Unity data; "
+            "see Docs/PASS11_ROCKET_RECOVERY_UA.md."
+        )
     contents = path.read_bytes()
     if len(contents) < 68 or contents[:12] != KTX_MAGIC:
         raise ValueError(f"{path.name}: invalid KTX1 header")
