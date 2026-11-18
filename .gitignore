@@ -157,3 +157,8 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 /Assets/RecoveredEffectsPass14Local/
 /Assets/RecoveredEffectsPass14Local.meta
 /Assets/Scenes/Escape_Zone003_PC_EFFECTS_PASS14*.unity*
+
+# PASS15 private laser and recorded debris
+/Assets/RecoveredVisualsPass15Local/
+/Assets/RecoveredVisualsPass15Local.meta
+/Assets/Scenes/Escape_Zone003_PC_RESTORED_PASS15*.unity*

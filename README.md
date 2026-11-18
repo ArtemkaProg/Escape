@@ -328,3 +328,8 @@
 ### PASS14 — laser and rocket effects
 
 Recovered the original ASTC UFO laser, both native rocket trails, proximity-driven door and independent fuel-light ownership. Windows preview: `Builds/Windows-PASS14/Escape-PASS14.exe` (local only). [Details and remaining work](Docs/PASS14_ROCKET_EFFECTS_UA.md). Smoke/fire/fog and survivor AI remain pending; Zone003 has no original FuelEvent.
+
+
+### PASS15 — actual beam, bright trail and recorded debris
+
+Corrected the active Laser sprite and the reactor material-reference offset missed in PASS14. Restored both original recorded PhysicalGroup sequences (48 parts). Local Windows build: `Builds/Windows-PASS15/Escape-PASS15.exe`. [Verification and remaining work](Docs/PASS15_LASER_TRAILS_DEBRIS_UA.md). Survivor attraction and legacy atmosphere/oil emitters remain pending.

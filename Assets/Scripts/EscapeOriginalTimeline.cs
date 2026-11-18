@@ -36,6 +36,7 @@ public sealed class EscapeOriginalTimeline : MonoBehaviour
     public float duration, speed;
     public Track[] tracks;
     public EscapePumpRigPlayback pumpRig;
+    public EscapeRecordedDestruction destruction;
 
     public void ResetTimeline()
     {
@@ -84,5 +85,6 @@ public sealed class EscapeOriginalTimeline : MonoBehaviour
             }
         }
         if (pumpRig != null) pumpRig.Evaluate(time);
+        if (destruction != null) destruction.Evaluate(time);
     }
 }

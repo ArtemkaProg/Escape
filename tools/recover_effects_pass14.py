@@ -114,7 +114,7 @@ def recover(project):
     for _ in range(r.i32()):
         assert r.i32()==0;id=r.i32();clamp=bool(r.u8());r.align();maxem,emscale=r.f32(),r.f32();clampw=bool(r.u8());r.align();maxw=r.f32()
         b=raw(id);assert len(b)==109 and obs[id]['class_id']==96
-        go=struct.unpack_from('<i',b,4)[0];material=struct.unpack_from('<i',b,32)[0];time,width,end=struct.unpack_from('<3f',b,72)
+        go=struct.unpack_from('<i',b,4)[0];assert struct.unpack_from('<ii',b,28)==(1,1);material=struct.unpack_from('<i',b,36)[0];assert material in (29,30);time,width,end=struct.unpack_from('<3f',b,72)
         colors=[[v/255 for v in b[i:i+4]] for i in range(84,104,4)]
         trails.append(dict(goId=go,material=material,texture=textures[73 if material==30 else 54],time=time,width=width,endWidth=end,gradient=[dict(zip(('r','g','b','a'),c)) for c in colors],minVertex=struct.unpack_from('<f',b,104)[0],clampEmission=clamp,maxEmission=maxem,emissionScale=emscale,clampWidth=clampw,widthMax=maxw))
     assert r.p==len(reactor) and len(trails)==2
