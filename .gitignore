@@ -162,3 +162,8 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 /Assets/RecoveredVisualsPass15Local/
 /Assets/RecoveredVisualsPass15Local.meta
 /Assets/Scenes/Escape_Zone003_PC_RESTORED_PASS15*.unity*
+
+# PASS16 private original particle parameters, textures and scene
+/Assets/RecoveredParticlesPass16Local/
+/Assets/RecoveredParticlesPass16Local.meta
+/Assets/Scenes/Escape_Zone003_PC_PARTICLES_PASS16*.unity*
