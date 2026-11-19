@@ -6,6 +6,7 @@ using UnityEngine;
 public sealed class EscapeSourceCameraStack : MonoBehaviour
 {
     public Camera sky,perspective;public float sourceFov,sourceZ,skySizeRatio;
+    public bool sortBackgroundByDepth;
     private void OnEnable(){Synchronize();}
     private void LateUpdate(){Synchronize();}
     private void OnDisable(){if(sky!=null)sky.enabled=false;if(perspective!=null)perspective.enabled=false;}
@@ -26,6 +27,9 @@ public sealed class EscapeSourceCameraStack : MonoBehaviour
         // Keep the verified PC foreground zoom while preserving the source
         // perspective/foreground size ratio (source main camera half-height 4.05).
         perspective.fieldOfView=2*Mathf.Atan(Mathf.Tan(sourceFov*Mathf.Deg2Rad*.5f)*main.orthographicSize/4.05f)*Mathf.Rad2Deg;
+        // A wide crane quad and a smoke system have different bounds centers.
+        // Radial distance sorting swaps them as X changes; keep their Z order.
+        if(sortBackgroundByDepth)perspective.transparencySortMode=TransparencySortMode.Orthographic;
         // Let Unity own the render/culling job lifetime in camera depth order.
         // Do not re-enter camera rendering from a culling callback.
     }

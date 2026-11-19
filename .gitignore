@@ -175,3 +175,8 @@ Assets/Scenes/Escape_Zone003_ROCKET_DIAGNOSTIC_PASS10*.unity.meta
 
 # PASS18 local bugfix scene
 /Assets/Scenes/Escape_Zone003_PC_BUGFIX_PASS18*.unity*
+
+# PASS19 private collider copies and scene
+/Assets/RecoveredPolishPass19Local/
+/Assets/RecoveredPolishPass19Local.meta
+/Assets/Scenes/Escape_Zone003_PC_VISUAL_POLISH_PASS19*.unity*
