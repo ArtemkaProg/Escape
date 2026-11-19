@@ -1,5 +1,7 @@
 # PASS18 — виправлення без нових механік
 
+Оновлення: Unity 6000.0.85f2 встановлено та перевірено; див. [звіт перевірки](PASS18_UNITY85_UA.md). Попередній опис нижче зберігає результати діагностики 6000.0.58f2.
+
 Сцена: `Assets/Scenes/Escape_Zone003_PC_BUGFIX_PASS18.unity`.
 Windows: `Builds/Windows-PASS18/Escape-PASS18.exe`.
 

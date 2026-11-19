@@ -20,7 +20,7 @@
 
 - PASS18: звичайний порядок фонових камер без вкладеного рендеру, точні кінці ліній, успадкування швидкості помпи; повні діагностичні прогони Zone003 на 30/60/144 FPS.
 
-- Відкрито: native JobTempAlloc у ParticleSystemGeometryJob в Editor 6000.0.58f2; потрібен патч Editor і повторна перевірка (див. Docs/PASS18_BUGFIX_UA.md).
+- Unity оновлено до 6000.0.85f2: native allocator-попередження не відтворилися в Editor і Windows-прогонах; див. Docs/PASS18_UNITY85_UA.md.
 
 ## Порядок наступної роботи
 

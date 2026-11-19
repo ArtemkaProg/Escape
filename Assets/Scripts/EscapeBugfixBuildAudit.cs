@@ -10,6 +10,9 @@ public sealed class EscapeBugfixBuildAudit : MonoBehaviour
  string output;EscapePlayableZone game;EscapeSurvivorRescue rescue;EscapeRecoveredSurvivor last;
  EscapeSourceCameraStack stack;MeshRenderer[] backgrounds;bool started,launched,paused,finished;float pauseTime;Vector3 launch;int[] missing;
  RenderTexture auditTarget;
+ int renderedFrames,backgroundFrames;
+ void OnRendered(Camera camera){if(camera==stack.perspective)backgroundFrames++;}
+ void OnDestroy(){Camera.onPostRender-=OnRendered;}
  [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
  static void Install()
  {
@@ -18,20 +21,23 @@ public sealed class EscapeBugfixBuildAudit : MonoBehaviour
  }
  void Start()
  {
+  Application.runInBackground=true;
   var args=Environment.GetCommandLineArgs();int i=Array.IndexOf(args,"-auditFps");Application.targetFrameRate=i>=0?int.Parse(args[i+1]):60;QualitySettings.vSyncCount=0;
   game=FindFirstObjectByType<EscapePlayableZone>();rescue=FindFirstObjectByType<EscapeSurvivorRescue>();
   stack=game.gameCamera.GetComponent<EscapeSourceCameraStack>();last=rescue.people.Single(p=>p.sourceGo==27181);
   backgrounds=FindObjectsByType<MeshRenderer>(FindObjectsSortMode.None).Where(r=>r.gameObject.layer==17).ToArray();missing=new int[backgrounds.Length];
   auditTarget=new RenderTexture(640,360,24);game.gameCamera.targetTexture=auditTarget;stack.Synchronize();
+  Camera.onPostRender+=OnRendered;
+  Debug.Log("PASS18 audit initialized; Unity="+Application.unityVersion+" duration="+game.timeline.duration);
  }
  void LateUpdate()
  {
   if(finished)return;
+  if(++renderedFrames%300==0)Debug.Log("PASS18 audit frame="+renderedFrames+" time="+game.ZoneTime+" state="+game.State);
   if(!started){game.Restart();rescue.ResetRescue();game.HoldMotionForAudit=true;game.InvincibleForAudit=true;game.ThrustOverride=false;game.StartFlight();started=true;return;}
   if(!stack.sky.enabled || !stack.perspective.enabled || stack.sky.depth>=stack.perspective.depth || stack.perspective.depth>=game.gameCamera.depth){Finish("FAIL: camera order",1);return;}
-  // A hidden Windows player can skip presenting frames. Explicit offscreen
-  // rendering here exercises real culling without nesting any render callback.
-  stack.sky.Render();stack.perspective.Render();game.gameCamera.Render();
+  // Exercise the production camera loop. The shared offscreen target lets a
+  // hidden player render without presenting a window; no extra Camera.Render.
   var planes=GeometryUtility.CalculateFrustumPlanes(stack.perspective);
   for(int i=0;i<backgrounds.Length;i++)
   {
@@ -55,10 +61,11 @@ public sealed class EscapeBugfixBuildAudit : MonoBehaviour
   if(game.State==EscapePlayableZone.FlightState.Complete)
   {
    if(!launched){Finish("FAIL: pump never released",1);return;}
-   Finish("PASS: full zone, native render loop, background frustum visibility, upward/forward pump launch="+launch+", pause/resume; FPS="+Application.targetFrameRate,0);
+   if(backgroundFrames<100){Finish("FAIL: background camera did not render enough frames: "+backgroundFrames,1);return;}
+   Finish("PASS: full zone, normal camera loop, background frustum visibility; rendered background frames="+backgroundFrames+", upward/forward pump launch="+launch+", pause/resume; FPS="+Application.targetFrameRate,0);
   }
  }
- void Finish(string text,int code){finished=true;StartCoroutine(FinishAfterFrames(text,code));}
+ void Finish(string text,int code){finished=true;Debug.Log("PASS18 audit draining render jobs: "+text);StartCoroutine(FinishAfterFrames(text,code));}
  System.Collections.IEnumerator FinishAfterFrames(string text,int code)
  {
   if(game.State==EscapePlayableZone.FlightState.Playing)game.TogglePause();
